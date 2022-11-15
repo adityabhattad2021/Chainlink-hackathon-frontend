@@ -13,7 +13,7 @@ import { publicProvider } from "wagmi/providers/public";
 import Header from "../components/Header";
 
 const { chains, provider } = configureChains(
-	[chain.goerli, chain.hardhat, chain.localhost],
+	[chain.localhost],
 	[publicProvider()]
 );
 

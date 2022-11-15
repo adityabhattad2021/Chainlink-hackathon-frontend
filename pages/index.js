@@ -4,7 +4,7 @@ import { useIsMounted } from "../hooks/useIsMounted";
 import {useIsOrganiser} from "../hooks/useIsOrganiser"; 
 import {useRouter} from "next/router";
 
-const Home = () => {
+export default function Home() {
 	const router = useRouter()
 	const  mounted  = useIsMounted();
 	const { address, isConnected } = useAccount();
@@ -40,4 +40,4 @@ const Home = () => {
   
 };
 
-export default Home;
+

@@ -13,7 +13,7 @@ const initialState = {
 };
 
 const ipfsURI = "https://w3s.link/ipfs/";
-const ipfsEnd = "/post.json";
+const ipfsEnd = "/candidate.json";
 
 const ipfsImgEnd = "/candidate.png";
 
@@ -21,6 +21,8 @@ const ipfsImgEnd = "/candidate.png";
 export default function AddCandidate() {
 	const [candidate, setCandidate] = useState(initialState);
 
+	const [loading,setLoading]=useState(false);
+	const [isUploading,setIsUploading]=useState(false);
 	const storage = new Web3Storage({ token });
 	const { name, walletAddress } = candidate;
 
@@ -29,6 +31,7 @@ export default function AddCandidate() {
 	}
 
 	async function handleFileChange(e) {
+		setIsUploading(true);
 		const uploadedFile = e.target.files[0];
 		const blob = uploadedFile.slice(0, uploadedFile.size, "image/png");
 		const forIPFS = new File([blob], "candidate.png", {
@@ -45,13 +48,16 @@ export default function AddCandidate() {
 			...prevState,
 			candidateImage: `${ipfsURI}${cid}${ipfsImgEnd}`,
 		}));
+		setIsUploading(false)
 	}
 
 	async function addNewCandidate() {
 		if (!name || !walletAddress) return;
-
+		setLoading(true);
 		const hash = await saveCandidateToIPFS();
 		await saveCandidate(hash);
+		setLoading(false);
+		setCandidate(initialState);
 
 	}
 
@@ -84,7 +90,7 @@ export default function AddCandidate() {
                 const candidateIPFS = `${ipfsURI}${hash}${ipfsEnd}`;
                 const candidateImg = candidate.candidateImage;
                 const val = await contract.addCandidate(candidate.walletAddress,candidate.name,candidateImg,candidateIPFS);
-                await provider.waitForTransection(val.hash);
+  
                 console.log("Val ",val);
             }catch(err){
                 console.log(err);
@@ -132,8 +138,13 @@ export default function AddCandidate() {
 					className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl m-2"
 					type="submit"
                     onClick={addNewCandidate}
+					disabled={isUploading}
 				>
-					Add Candidate
+					{isUploading && "Uploading..."}
+					{
+						!isUploading && loading ? "Adding..." : "Add Candidate"
+					}
+					
 				</button>
 			</div>
 		</div>

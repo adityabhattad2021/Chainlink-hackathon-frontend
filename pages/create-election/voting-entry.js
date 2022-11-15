@@ -2,19 +2,17 @@ import { useState } from "react";
 
 import {
 	useContractRead,
-	usePrepareContractWrite,
-	useContractWrite,
-	useWaitForTransaction,
 } from "wagmi";
 import { contractAddress } from "../../constants";
 import { useIsMounted } from "../../hooks/useIsMounted";
-import { useDebounce } from "../../hooks/useDebounce";
 import Voting from "../../../smart-contracts/artifacts/contracts/VotingContract.sol/Voting.json";
+import { ethers } from "ethers";
+import { useRouter } from "next/router";
 
 export default function VotingEntry() {
+	const router = useRouter();
 	const [currentRoundNumber, setCurrentRoundNumber] = useState(0);
 	const [votingDuration, setVotingDuration] = useState(0);
-	const debouncedVotingDuration = useDebounce(votingDuration, 500);
 	const mounted = useIsMounted();
 	const { data: roundData, isLoading: isLoadingVotingRound } =
 		useContractRead({
@@ -26,24 +24,27 @@ export default function VotingEntry() {
 			},
 		});
 
-	const {
-		config,
-		error: prepareError,
-		isError: isPrepareError,
-	} = usePrepareContractWrite({
-		address: contractAddress,
-		abi: Voting.abi,
-		functionName: "startNewVoting",
-		args: [parseInt(debouncedVotingDuration)],
-		enabled: Boolean(debouncedVotingDuration),
-	});
+	async function createNewRound() {
+		if (typeof window.ethereum !== "undefined") {
+			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			const signer = provider.getSigner();
+			const contract = new ethers.Contract(
+				contractAddress,
+				Voting.abi,
+				signer
+			);
 
-	const { data, error, isError, write } = useContractWrite(config);
-
-	const {
-		isLoading: isWaitingForTransaction,
-		isSuccess: isCreateVotingRoundSuccess,
-	} = useWaitForTransaction({ hash: data?.hash });
+			try {
+				const duration = votingDuration;
+				const tx =await contract.startNewVoting(duration);
+	
+				console.log("tx: ", tx);
+				router.push("/create-election/add-candidate");
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	}
 
 	return (
 		<div>
@@ -52,45 +53,21 @@ export default function VotingEntry() {
 					<div className=" text-4xl font-bold m-5">
 						Current Voting Round: {currentRoundNumber}
 					</div>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault();
-							write?.();
-						}}
-					>
-						<div className="flex flex-col">
-							<label className="text-2xl font-bold m-5">
-								Enter Voting Duration (in seconds)
-							</label>
-							<input
-								className="border-2 border-black rounded-md p-2 m-5"
-								type="number"
-								value={votingDuration}
-								onChange={(e) =>
-									setVotingDuration(e.target.value)
-								}
-							/>
-							<button
-								disabled={!write}
-								className="bg-black text-white p-2 rounded-md m-5"
-							>
-								{isWaitingForTransaction
-									? "Creating Voting Round"
-									: "Create Voting Round"}
-							</button>
-
-							{isCreateVotingRoundSuccess && (
-								<div className="text-green-500 font-bold text-2xl text-center">
-									Voting Round Created
-								</div>
-							)}
-							{(isPrepareError || isError) && (
-								<div className="text-red-500 font-bold text-2xl">
-									{prepareError?.message || error?.message}
-								</div>
-							)}
-						</div>
-					</form>
+					<div className="flex flex-col">
+						<label className="text-2xl font-bold m-5">
+							Enter Voting Duration (in seconds)
+						</label>
+						<input
+							className="border-2 border-black rounded-md p-2 m-5"
+							type="number"
+							value={votingDuration}
+							onChange={(e) => setVotingDuration(e.target.value)}
+						/>
+						<button className="bg-black text-white p-2 rounded-md m-5"
+						onClick={createNewRound}>
+							Create New Round
+						</button>
+					</div>
 				</div>
 			) : (
 				<div
