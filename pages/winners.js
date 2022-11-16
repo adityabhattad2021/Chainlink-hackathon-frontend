@@ -91,7 +91,7 @@ export default function Winners() {
 							</h1>
 						</div>
 						<div className="p-4 text-center font-bold text-xl">
-							{parseInt(wDetails?.voteCount)} out of {parseInt(totalVoters)} people voted for this candidate.
+							Won by {parseInt(wDetails?.voteCount)} votes.
 						</div>
 					</div>
 				</>

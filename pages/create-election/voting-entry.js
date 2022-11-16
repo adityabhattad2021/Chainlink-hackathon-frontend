@@ -8,11 +8,14 @@ import { useIsMounted } from "../../hooks/useIsMounted";
 import Voting from "../../../smart-contracts/artifacts/contracts/VotingContract.sol/Voting.json";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import { useIsOrganiser } from "../../hooks/useIsOrganiser";
 
 export default function VotingEntry() {
 	const router = useRouter();
+	const isOrganiser = useIsOrganiser();
 	const [currentRoundNumber, setCurrentRoundNumber] = useState(0);
 	const [votingDuration, setVotingDuration] = useState(0);
+	const [isCreating, setIsCreating] = useState(false);
 	const mounted = useIsMounted();
 	const { data: roundData, isLoading: isLoadingVotingRound } =
 		useContractRead({
@@ -25,6 +28,7 @@ export default function VotingEntry() {
 		});
 
 	async function createNewRound() {
+		setIsCreating(true);
 		if (typeof window.ethereum !== "undefined") {
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			const signer = provider.getSigner();
@@ -39,11 +43,24 @@ export default function VotingEntry() {
 				const tx =await contract.startNewVoting(duration);
 	
 				console.log("tx: ", tx);
+				setIsCreating(false);
 				router.push("/create-election/add-candidate");
 			} catch (error) {
 				console.log(error);
 			}
 		}
+	}
+
+	if(!isOrganiser){
+		return (
+			<div
+				className="flex flex-col items-center justify-center w-full h-screen"
+			>
+					<h1 className="text-2xl font-bold text-center">
+						You are not the organiser of this election
+					</h1>
+			</div>
+		)
 	}
 
 	return (
@@ -65,7 +82,7 @@ export default function VotingEntry() {
 						/>
 						<button className="bg-black text-white p-2 rounded-md m-5"
 						onClick={createNewRound}>
-							Create New Round
+							{isCreating ? "Creating new Round...":"Create New Round"}
 						</button>
 					</div>
 				</div>

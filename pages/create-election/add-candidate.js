@@ -17,12 +17,11 @@ const ipfsEnd = "/candidate.json";
 
 const ipfsImgEnd = "/candidate.png";
 
-
 export default function AddCandidate() {
 	const [candidate, setCandidate] = useState(initialState);
 
-	const [loading,setLoading]=useState(false);
-	const [isUploading,setIsUploading]=useState(false);
+	const [loading, setLoading] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
 	const storage = new Web3Storage({ token });
 	const { name, walletAddress } = candidate;
 
@@ -48,7 +47,7 @@ export default function AddCandidate() {
 			...prevState,
 			candidateImage: `${ipfsURI}${cid}${ipfsImgEnd}`,
 		}));
-		setIsUploading(false)
+		setIsUploading(false);
 	}
 
 	async function addNewCandidate() {
@@ -58,7 +57,6 @@ export default function AddCandidate() {
 		await saveCandidate(hash);
 		setLoading(false);
 		setCandidate(initialState);
-
 	}
 
 	async function saveCandidateToIPFS() {
@@ -77,75 +75,87 @@ export default function AddCandidate() {
 	}
 
 	async function saveCandidate(hash) {
-		if(typeof window.ethereum !== "undefined"){
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(
-                contractAddress,
-                Voting.abi,
-                signer
-            )
+		if (typeof window.ethereum !== "undefined") {
+			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			const signer = provider.getSigner();
+			const contract = new ethers.Contract(
+				contractAddress,
+				Voting.abi,
+				signer
+			);
 
-            try{
-                const candidateIPFS = `${ipfsURI}${hash}${ipfsEnd}`;
-                const candidateImg = candidate.candidateImage;
-                const val = await contract.addCandidate(candidate.walletAddress,candidate.name,candidateImg,candidateIPFS);
-  
-                console.log("Val ",val);
-            }catch(err){
-                console.log(err);
-            }
-        }
+			try {
+				const candidateIPFS = `${ipfsURI}${hash}${ipfsEnd}`;
+				const candidateImg = candidate.candidateImage;
+				const val = await contract.addCandidate(
+					candidate.walletAddress,
+					candidate.name,
+					candidateImg,
+					candidateIPFS
+				);
+
+				console.log("Val ", val);
+			} catch (err) {
+				console.log(err);
+			}
+		}
 	}
 
 	return (
 		<div>
 			<div className="grid place-items-center">
 				<div className=" text-4xl font-bold m-5">Add Candidate</div>
-				<div className="flex flex-col">
+				<div className="flex flex-col w-1/2">
 					<label className="text-2xl font-bold">Candidate Name</label>
 					<input
 						className="border-2 border-black rounded-md p-2 m-2"
 						type="text"
-                        name="name"
+						name="name"
 						value={candidate.name}
 						onChange={onChange}
 					/>
 				</div>
-				<div className="flex flex-col">
+				<div className="flex flex-col w-1/2">
 					<label className="text-2xl font-bold">
 						Candidate Address
 					</label>
 					<input
 						className="border-2 border-black rounded-md p-2 m-2"
 						type="text"
-                        name="walletAddress"
+						name="walletAddress"
 						value={candidate.walletAddress}
 						onChange={onChange}
 					/>
 				</div>
-				<div className="flex flex-col">
+				<div className="flex flex-col w-1/2">
 					<label className="text-2xl font-bold">
 						Candidate Image
 					</label>
 					<input
-						className="border-2 border-black rounded-md p-2 m-2"
+						className="border-2 border-black rounded-md  p-2 m-2"
 						type="file"
 						onChange={handleFileChange}
 					/>
 				</div>
-				<button
-					className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl m-2"
-					type="submit"
-                    onClick={addNewCandidate}
-					disabled={isUploading}
-				>
-					{isUploading && "Uploading..."}
-					{
-						!isUploading && loading ? "Adding..." : "Add Candidate"
-					}
-					
-				</button>
+				{isUploading ? (
+					<button
+						className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl m-2"
+						type="submit"
+						onClick={addNewCandidate}
+						disabled={isUploading}
+					>
+						Uploading...
+					</button>
+				) : (
+					<button
+						className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl m-2"
+						type="submit"
+						onClick={addNewCandidate}
+						disabled={isUploading}
+					>
+						{loading ? "Adding..." : "Add Candidate"}
+					</button>
+				)}
 			</div>
 		</div>
 	);

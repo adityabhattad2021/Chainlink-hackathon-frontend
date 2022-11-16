@@ -25,6 +25,7 @@ export default function AddVoter(){
     const [voter,setVoter] = useState(initialState)
 
     const storage = new Web3Storage({token})
+    const [isLoading,setIsLoading] = useState(false)
     const {name,walletAddress} = voter
     const router = useRouter()
 
@@ -77,9 +78,11 @@ export default function AddVoter(){
 
     async function addNewVoter(){
         if(!name || !walletAddress) return;
+        setIsLoading(true);
         const hash = await saveVoterToIPFS();
         await saveVoterOnChain(hash);
-        router.push('/candidates');
+        setIsLoading(false);
+        router.push('/');
     }
 
     return(
@@ -109,7 +112,7 @@ export default function AddVoter(){
 					hover:bg-gray-700"
                     onClick={addNewVoter}
                 >
-					Add
+                    {isLoading ? "Adding Voter..." : "Add Voter"}
 				</button>
                 </div>
 
