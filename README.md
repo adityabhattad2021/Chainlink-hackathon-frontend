@@ -1,27 +1,44 @@
-# Next.js + Tailwind CSS Example
+A Fully Decentralized Voting System (Frontend).
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.2)](https://tailwindcss.com/blog/tailwindcss-v3-2) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+Build with with:
+ - Nextjs
+ - Wagmi
+ - Rainbow Kit
+ - Web3.storage
+ - Ethers.js
 
-## Deploy your own
+ 
+ Preview:
+ 
+  - Main page
+![Page1](https://user-images.githubusercontent.com/93488388/202191288-83623580-e4c5-4211-a52d-d9d6a70f94ef.png)
+ 
+  - Start new voting round page
+  ![Page2](https://user-images.githubusercontent.com/93488388/202191505-20789ca2-dc90-4e9c-98f1-423b60eb59dc.png)
+  
+  - Add candidate page
+  ![Page3](https://user-images.githubusercontent.com/93488388/202191593-5befb1e8-8ef9-4bb9-9b98-0992bba76ad2.png)
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+ - Voter Registeration (To be removed in later version)
+ ![Page4](https://user-images.githubusercontent.com/93488388/202191821-54eacc10-370f-4053-aeb8-4dd6ddc0fec6.png)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
 
-## How to use
+ - Manage voter page
+![Page6](https://user-images.githubusercontent.com/93488388/202192007-1804f2b7-9107-4648-9638-e68a354a7de5.png)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+ - Voting page
+ ![Page5](https://user-images.githubusercontent.com/93488388/202192285-ab5574d0-7150-4d63-b58e-92c26ec4e9fd.png)
+ 
+ - Winner decleration page
+  ![Page7](https://user-images.githubusercontent.com/93488388/202192457-b0dbbdd9-9516-4330-b30d-6ee4ac019972.png)
+  
+ - Find winners of previous round page
+   ![Page8](https://user-images.githubusercontent.com/93488388/202192637-c693c641-b195-4820-ac43-163666542d83.png)
+   
+   
+   [Link to smart contract with solidity](https://github.com/adityabhattad2021/Decentralized-Voting)
 
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-```
+  
+ 
+ 
 
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
