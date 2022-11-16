@@ -32,6 +32,16 @@ export default function Home() {
 		args: [currentRoundNumber, address],
 	});
 
+	const {
+		data: hasVoterAlreadyVoted,
+		isLoading: isLoadingHasVoterAlreadyVotes,
+	} = useContractRead({
+		address: contractAddress,
+		abi: Voting.abi,
+		functionName: "hasVoterAlreadyVoted",
+		args: [address],
+	});
+
 	return (
 		<div className="flex  flex-col items-center justify-center py-2 ">
 			<Head>
@@ -43,20 +53,30 @@ export default function Home() {
 					<div>
 						{isOrganiser ? (
 							<Link href="/create-election/voting-entry">
-								<button
-									className="px-4 py-3  bg-black text-white rounded-2xl text-4xl font-bold mt-60 "
-								>Start Election</button>
+								<button className="px-4 py-3  bg-black text-white rounded-2xl text-4xl font-bold mt-60 ">
+									Start Election
+								</button>
 							</Link>
 						) : (
 							<div>
 								{!isLoadingIsRegsitered ? (
 									<div>
 										{isVoterRegister ? (
-											<Link href="/candidates">
-												<button className="px-4 py-3  bg-black text-white rounded-2xl text-4xl font-bold mt-60 ">
-													Vote
-												</button>
-											</Link>
+											<div>
+												{!isLoadingHasVoterAlreadyVotes ? (
+													<Link href="/candidates">
+													<button className="px-4 py-3  bg-black text-white rounded-2xl text-4xl font-bold mt-60 ">
+														{hasVoterAlreadyVoted ? "View Results" : "Vote"}
+													</button>
+												</Link>
+												) : (
+													<div>
+														<h1 className="px-4 py-3  font-bold mt-60 ">
+															Loading...
+														</h1>
+													</div>
+												)}
+											</div>
 										) : (
 											<Link href="/register-voter">
 												<button className="px-4 py-3  bg-black text-white rounded-2xl text-4xl font-bold mt-60 ">

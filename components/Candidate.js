@@ -49,11 +49,9 @@ export default function Candidate({ address }) {
 	const {data:hasAddrAlreadyVoted, isLoading: isLoadingHasAddrAlreadyVoted} = useContractRead({
 		address: contractAddress,
 		abi: Voting.abi,
-		functionName: "hasVoterAreadyVotes",
+		functionName: "hasVoterAreadyVoted",
 		args: [currentVoter],
 		onSuccess(hasAddrAlreadyVoted) {
-			console.log(hasAddrAlreadyVoted);
-			console.log("Working");
 			setHasAddressAlreadyVoted
 			(hasAddrAlreadyVoted);
 		}
