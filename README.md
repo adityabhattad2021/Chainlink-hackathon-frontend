@@ -1,4 +1,4 @@
-A Fully Decentralized Voting System (Frontend).
+# A Fully Decentralized Voting System (Frontend).
 
 Build with with:
  - Nextjs
@@ -35,6 +35,32 @@ Build with with:
  - Find winners of previous round page
    ![Page8](https://user-images.githubusercontent.com/93488388/202192637-c693c641-b195-4820-ac43-163666542d83.png)
    
+   
+   ## Try is out :
+   
+Step 1.
+   ```shell
+   mkdir decentralized voting
+   git clone https://github.com/adityabhattad2021/Chainlink-hackathon-frontend.git
+   git clone https://github.com/adityabhattad2021/Decentralized-Voting.git
+   ```
+   
+Step 2.
+  ```Rename  "Decentralized-Voting" to "smart-contracts" and "Chainlink-hackathon-frontend" to "nextjs-frontend"```
+ 
+Step 4.
+  ```In smart-contracts/deploy/01-deploy-voting-contract.js uncomment line 42-48```
+
+Step 3.
+  ```shell
+  cd smart-contracts
+  yarn
+  hh node
+  hh run scripts/mockVoting.js --network localhost
+  cd ../nextjs-frontend
+  yarn
+  yarn dev
+  ```
    
    [Link to smart contract with solidity](https://github.com/adityabhattad2021/Decentralized-Voting)
 
