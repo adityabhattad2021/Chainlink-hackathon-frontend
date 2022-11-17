@@ -48,10 +48,13 @@ Step 1.
 Step 2.
   ```Rename  "Decentralized-Voting" to "smart-contracts" and "Chainlink-hackathon-frontend" to "nextjs-frontend"```
  
-Step 4.
-  ```In smart-contracts/deploy/01-deploy-voting-contract.js uncomment line 42-48```
-
 Step 3.
+  ```In smart-contracts/deploy/01-deploy-voting-contract.js uncomment line 42-48```
+  
+Step 4. 
+ ```Configure the required keys in .env file of both "smart-contracts" and "nextjs-frontend"```
+
+Step 5.
   ```shell
   cd smart-contracts
   yarn
