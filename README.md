@@ -36,7 +36,7 @@ Build with with:
    ![Page8](https://user-images.githubusercontent.com/93488388/202192637-c693c641-b195-4820-ac43-163666542d83.png)
    
    
-   ## Try is out :
+   ## Try it out :
    
 Step 1.
    ```shell
